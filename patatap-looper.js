@@ -5,10 +5,10 @@
       _loops: {},
       _stop: false,
       add: function(name, beats) {
-        this._loops[name] = beats.split(' ');
+        this._loops[name] = beats.split('');
         return this;
       },
-      remove: function(name, beats) {
+      remove: function(name) {
         delete this._loops[name];
       },
       list: function() {
@@ -66,6 +66,7 @@
 
 
 
-superloops.add('base', 'e - - - e - - - e - - - e - - -')
-          .add('snare', '- - o - - - o - - - o - - - o -')
-          .add('love', '- p - h - e - a - r - t - m - -');
+superloops.add('on', 'w-w-w-w-e-e-e-e-')
+          .add('measure', 'i-------i-------')
+          .add('off', '---a---a---a---a')
+          .add('snare', '--n---n---n--nn-');
