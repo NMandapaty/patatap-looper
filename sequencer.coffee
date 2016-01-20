@@ -19,7 +19,7 @@ class Reader
         @keyPresses.join "<br>"
         
 $ -> 
-    clearFunc = ->
+    clearFunc = =>
         do $('#test').empty
         @reader = new Reader()
 

@@ -33,10 +33,12 @@
 
   $(function() {
     var clearFunc, printing;
-    clearFunc = function() {
-      $('#test').empty();
-      return this.reader = new Reader();
-    };
+    clearFunc = (function(_this) {
+      return function() {
+        $('#test').empty();
+        return _this.reader = new Reader();
+      };
+    })(this);
     printing = false;
     this.reader = new Reader();
     $(document).keypress(function(e) {
