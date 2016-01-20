@@ -5,16 +5,22 @@
   Reader = (function() {
     function Reader() {
       this.keyPresses = [];
+      this.lastKeyPress = "";
       this.lastTimeStamp = 0;
     }
 
-    Reader.prototype.addKey = function(keyString, time) {
+    Reader.prototype.addKeyPress = function(keyString, time) {
+      var diff;
       if (time - this.lastTimeStamp < 25) {
         this.keyPresses[this.keyPresses.length - 1][0] += keyString;
       } else {
-        this.keyPresses.push([keyString, time]);
+        diff = this.lastTimeStamp === 0 ? 0 : time - this.lastTimeStamp;
+        if (this.lastKeyPress) {
+          this.keyPresses.push([this.lastKeyPress, diff]);
+        }
       }
-      return this.lastTimeStamp = time;
+      this.lastTimeStamp = time;
+      return this.lastKeyPress = keyString;
     };
 
     Reader.prototype.toHTML = function() {
@@ -26,28 +32,32 @@
   })();
 
   $(function() {
-    var printing, reader;
-    $('#clearButton').click(function() {
-      return $('#test').empty();
-    });
+    var clearFunc, printing;
+    clearFunc = function() {
+      $('#test').empty();
+      return this.reader = new Reader();
+    };
     printing = false;
-    reader = new Reader();
-    return $(document).keypress(function(e) {
+    this.reader = new Reader();
+    $(document).keypress(function(e) {
       var key, keyCode, time;
       keyCode = e.which;
       time = e.timeStamp;
       if (keyCode === 223) {
         printing = !printing;
         if (printing === false) {
-          $('#test').append(reader.toHTML());
+          $('#test').append(this.reader.toHTML());
         }
         return console.log("printing is now " + (printing ? "on" : "off"));
       } else if (printing) {
         key = String.fromCharCode(keyCode);
         console.log(key + " = " + keyCode + " at " + time);
-        return reader.addKey(key, time);
+        return this.reader.addKeyPress(key, time);
+      } else if (keyCode === 12) {
+        return clearFunc();
       }
     });
+    return $('#clearButton').click(clearFunc);
   });
 
 }).call(this);
